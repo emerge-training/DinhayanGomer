@@ -1,0 +1,54 @@
+import jk.widget
+import jk.widget.common
+
+class #widget:
+
+ui LayerWidget
+{
+	CanvasWidget {
+		color = Color.instance("#347890")
+	}
+	VerticalScrollerWidget {
+		AlignWidget {
+			marginLeft = 400
+			marginRight = 400
+			VerticalBoxWidget vbox : 0.5, 0.5, true {
+				margin = context.getHeightValue("5000um")
+				spacing = context.getHeightValue("2000um")
+				LabelWidget {
+					text = "ADMIN Login"
+					textColor = Color.instance("#2A9D8F")
+					fontSize = context.getHeightValue("10mm")
+					textAlign = LabelWidget.ALIGN_CENTER
+					fontBold = true
+				}
+                TextInputWidget email {
+					type = TextInputWidget.TYPE_EMAIL_ADDRESS
+					placeholder = "Email Address"
+					backgroundColor = Color.instance("#b0b0b0")
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+                TextInputWidget password {
+					type = TextInputWidget.TYPE_PASSWORD
+					placeholder = "Password"
+					backgroundColor = Color.instance("#b0b0b0")
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+			}
+		}
+	}
+}
+
+func initializeWidget override
+{
+	base.initializeWidget()
+	var signupbtn = ButtonWidget.forText(context, "Login", func{
+		NavigationWidget.switchToContainer(this, new RegistrationWidget(context))
+	})	
+	signupbtn.setWidgetBackgroundColor(Color.instance("#347890"))
+	signupbtn.setWidgetTextColor(Color.white())
+	signupbtn.setWidgetFontSize(context.getHeightValue("4mm"))
+	vbox.addWidget(signupbtn)
+}

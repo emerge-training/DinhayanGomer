@@ -1,0 +1,112 @@
+class name app.FacultyDatabase header public
+{
+	import jk.lang
+	import jk.log
+	import jk.sqlite
+	import jk.mysql
+	import jk.sql
+	import jk.env
+	import jk.time
+	ctor
+	class name Info header extends jk.json.JSONObjectAdapter implements jk.lang.StringObject public static static
+	{
+		import jk.json
+		ctor
+		func setId(value as string) as app.FacultyDatabase.Info
+		func getId as string
+		func setFname(value as string) as app.FacultyDatabase.Info
+		func getFname as string
+		func setLname(value as string) as app.FacultyDatabase.Info
+		func getLname as string
+		func setMname(value as string) as app.FacultyDatabase.Info
+		func getMname as string
+		func setStatus(value as string) as app.FacultyDatabase.Info
+		func getStatus as string
+		func setSex(value as string) as app.FacultyDatabase.Info
+		func getSex as string
+		func setAddress(value as string) as app.FacultyDatabase.Info
+		func getAddress as string
+		func setSub_handle(value as string) as app.FacultyDatabase.Info
+		func getSub_handle as string
+		func setTimeStampAddedValue(value as long) as app.FacultyDatabase.Info
+		func getTimeStampAddedValue as long
+		func setTimeStampAdded(value as jk.lang.LongIntegerObject) as app.FacultyDatabase.Info
+		func getTimeStampAdded as jk.lang.LongIntegerObject
+		func setTimeStampLastUpdatedValue(value as long) as app.FacultyDatabase.Info
+		func getTimeStampLastUpdatedValue as long
+		func setTimeStampLastUpdated(value as jk.lang.LongIntegerObject) as app.FacultyDatabase.Info
+		func getTimeStampLastUpdated as jk.lang.LongIntegerObject
+		func toJsonObject override as object
+		func fromJsonObject(o as object) override as bool
+		func fromJsonString(o as string) as bool
+		func toJsonString as string
+		func toString as string
+		func forJsonString(o as string) static as app.FacultyDatabase.Info
+		func forJsonObject(o as object) static as app.FacultyDatabase.Info
+	}
+	var INFO public static const as string
+	func forContext(ctx as jk.log.LoggingContext) static as app.FacultyDatabase
+	func updateTable(table as jk.sql.SQLTableInfo)
+	func updateinfoTables
+	func addInfo(info as app.FacultyDatabase.Info) as app.FacultyDatabase.Info
+	func updateInfo(id as string, info as app.FacultyDatabase.Info) as bool
+	func deleteInfo(id as string) as bool
+	func getInfo as jk.lang.DynamicMap
+	func close
+	func getDb as jk.mysql.MySQLDatabase #getterMethod
+	func setDb(v as jk.mysql.MySQLDatabase) as app.FacultyDatabase #setterMethod
+}
+class name app.FacultyApiHandler header extends jk.http.worker.HTTPRPCRouter public
+{
+	import jk.lang
+	import jk.http.worker
+	import jk.http.client
+	ctor
+	class name InfoRequest header extends jk.json.JSONObjectAdapter implements jk.lang.StringObject public static static
+	{
+		import jk.json
+		ctor
+		func setFname(value as string) as app.FacultyApiHandler.InfoRequest
+		func getFname as string
+		func setLname(value as string) as app.FacultyApiHandler.InfoRequest
+		func getLname as string
+		func setMname(value as string) as app.FacultyApiHandler.InfoRequest
+		func getMname as string
+		func setStatus(value as string) as app.FacultyApiHandler.InfoRequest
+		func getStatus as string
+		func setSex(value as string) as app.FacultyApiHandler.InfoRequest
+		func getSex as string
+		func setAddress(value as string) as app.FacultyApiHandler.InfoRequest
+		func getAddress as string
+		func setSub_handle(value as string) as app.FacultyApiHandler.InfoRequest
+		func getSub_handle as string
+		func toJsonObject override as object
+		func fromJsonObject(o as object) override as bool
+		func fromJsonString(o as string) as bool
+		func toJsonString as string
+		func toString as string
+		func forJsonString(o as string) static as app.FacultyApiHandler.InfoRequest
+		func forJsonObject(o as object) static as app.FacultyApiHandler.InfoRequest
+	}
+	func getDatabase as app.FacultyDatabase
+	func postProcess(req as jk.http.worker.HTTPWorkerRequest, resp as jk.http.worker.HTTPWorkerResponse) override
+	func initRoutes override
+}
+class name app.FacultyConfig header public
+{
+	import jk.lang
+	import jk.env
+	import jk.http.server.cors
+	ctor
+	func getAllowedOrigins as array
+	func getCorsUtil as jk.http.server.cors.HTTPServerCORSUtil
+}
+class name app.FacultyApiServer header extends jk.server.web.WebServer public
+{
+	import jk.lang
+	import jk.http.server
+	import jk.server.web
+	ctor
+	func initializeServer(server as jk.http.server.HTTPServer) override as bool
+	func initializeApplication override as bool
+}

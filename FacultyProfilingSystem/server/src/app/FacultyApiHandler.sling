@@ -1,0 +1,78 @@
+import jk.http.client
+import jk.http.worker
+
+class is HTTPRPCRouter #webapi2:
+
+model InfoRequest
+{
+    fname as string
+    lname as string
+    mname as string
+    status as string
+    sex as string
+    address as string
+    sub_handle as string
+
+}
+
+var db as FacultyDatabase
+var cors = FacultyConfig.getCorsUtil()
+
+func getDatabase as FacultyDatabase
+{
+    if not db {
+        db = FacultyDatabase.forContext(getCtx())
+        db.updateinfoTables()
+    }
+    return db
+}
+
+func postProcess(req as HTTPWorkerRequest, resp as HTTPWorkerResponse) override:
+    cors.handleWorkerRequest(req, resp)
+
+GET "/info"
+{
+    var info = assert getDatabase().getInfo()
+    sendOk info
+}
+
+POST "/info"
+{
+    var requestData = assert InfoRequest.forJsonString(req.getBodyString())
+        sendError "invalidRequest"
+    var info = new FacultyDatabase.Info()
+        info.setFname(requestData.getFname())
+        info.setLname(requestData.getLname())
+        info.setMname(requestData.getMname())
+        info.setStatus(requestData.getStatus())
+        info.setSex(requestData.getSex())
+        info.setAddress(requestData.getAddress())
+        info.setSub_handle(requestData.getSub_handle())
+    assert getDatabase().addInfo(info):
+        sendError "failedToSaveTask"
+    sendOk
+}
+
+PUT "/info/:id"
+{
+    var requestData = assert InfoRequest.forJsonString(req.getBodyString()):
+        sendError "invalidRequest"
+    var info = new FacultyDatabase.Info()
+        info.setFname(requestData.getFname())
+        info.setLname(requestData.getLname())
+        info.setMname(requestData.getMname())
+        info.setStatus(requestData.getStatus())
+        info.setSex(requestData.getSex())
+        info.setAddress(requestData.getAddress())
+        info.setSub_handle(requestData.getSub_handle())
+    assert getDatabase().updateInfo(vars.getString("id"), info):
+        sendError "FailedUpdateInfo"
+        sendOk
+}
+
+DELETE "/info/:id"
+{
+    assert getDatabase().deleteInfo(vars.getString("id")):
+        sendError "failedTodeleteInfo"
+    sendOk
+}

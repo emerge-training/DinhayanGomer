@@ -1,0 +1,83 @@
+import jk.widget.common
+
+class #widget:
+
+ui LayerWidget
+{
+	CanvasWidget {
+		color = Color.instance("#347890")
+	}
+	VerticalScrollerWidget {
+		AlignWidget {
+			VerticalBoxWidget vbox : 0.5, 0.5, true {
+				margin = context.getHeightValue("10sm")
+				spacing = context.getHeightValue("100um")
+				LabelWidget {
+					text = "Create Accounts"
+					textColor = Color.black()
+					fontSize = context.getHeightValue("6mm")
+					textAlign = LabelWidget.ALIGN_CENTER
+					fontBold = true
+				}
+				TextInputWidget firstname {
+					type = TextInputWidget.TYPE_NAME
+					placeholder = "FIRST NAME"
+					backgroundColor = Color.white()
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+				TextInputWidget lastname {
+					type = TextInputWidget.TYPE_NAME
+					placeholder = "LAST NAME"
+					backgroundColor = Color.white()
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+				TextInputWidget Contact {
+					type = TextInputWidget.TYPE_NAME
+					placeholder = "Contact Number"
+					backgroundColor = Color.white()
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+                TextInputWidget address {
+					type = TextInputWidget.TYPE_NAME
+					placeholder = "ADDRESS"
+					backgroundColor = Color.white()
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+				TextInputWidget username {
+					type = TextInputWidget.TYPE_NAME
+					placeholder = "USERNAME"
+					backgroundColor = Color.white()
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+				TextInputWidget password {
+					type = TextInputWidget.TYPE_NAME
+					placeholder = "PASSWORD"
+					backgroundColor = Color.white()
+					fontSize = context.getHeightValue("3mm")
+					padding = context.getHeightValue("2500um")
+				}
+               
+			}
+		}
+	}
+}
+
+func initializeWidget override
+{
+	var submitbtn = ButtonWidget.forText(context, "SUBMIT", func {
+		
+	})
+	submitbtn.setWidgetFontSize(context.getHeightValue("6mm"))
+	vbox.addWidget(submitbtn)
+	
+	var loginbtn = LabelWidget.forText(context, "LOGIN")
+
+
+	loginbtn.setWidgetFontSize(context.getHeightValue("3mm"))
+	vbox.addWidget(loginbtn)
+}

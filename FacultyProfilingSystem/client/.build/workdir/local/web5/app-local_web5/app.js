@@ -27085,7 +27085,7 @@ function app() {
 			return null;
 		}
 		AppAPIClient.instance = AppAPIClient.NEW();
-		AppAPIClient.instance.setApiUrl("http:// ec2-54-179-45-23.ap-southeast-1.compute.amazonaws.com:30120");
+		AppAPIClient.instance.setApiUrl("http://ec2-13-228-27-39.ap-southeast-1.compute.amazonaws.com:30120");
 		AppAPIClient.instance.setContext(context);
 		if(parentWidget != null) {
 			AppAPIClient.instance.setParentWidget(parentWidget);
@@ -27104,9 +27104,6 @@ function app() {
 		if(!(context != null)) {
 			return;
 		}
-		if(!(error != null)) {
-			return;
-		}
 		if(!(this.widgetDefaultErrorHandler != null)) {
 			context.showErrorDialog((error.toString()), null);
 			return;
@@ -27117,10 +27114,10 @@ function app() {
 		this.doPost("/task", data, callback, errorCallback);
 	};
 	AppAPIClient.prototype.updateTask = function(id, data, callback, errorCallback) {
-		this.doPut(("/task/" + JkLangString.safeString(id)), data, callback, errorCallback);
+		this.doPut(("/task" + JkLangString.safeString(id)), data, callback, errorCallback);
 	};
 	AppAPIClient.prototype.deleteTask = function(id, callback, errorCallback) {
-		this.doDelete(("/task/" + JkLangString.safeString(id)), callback, errorCallback);
+		this.doDelete(("/task" + JkLangString.safeString(id)), callback, errorCallback);
 	};
 	AppAPIClient.prototype.getTasks = function(callback, errorCallback) {
 		this.doGet("/tasks", callback, errorCallback);
@@ -27136,96 +27133,214 @@ function app() {
 		return o != null && o._t != null && o._t["AppAPIClient"] === true;
 	};
 	AppAPIClient.instance = null;
-	let AppTasklist = function() {
+	let AppRegistrationWidget = function() {
 		JkWidgetLayerWidget.call(this);
-		this.container = null;
-		this.list = null;
+		this.vbox = null;
+		this.firstname = null;
+		this.lastname = null;
+		this.Contact = null;
+		this.address = null;
+		this.username = null;
+		this.password = null;
 	};
-	AppTasklist.prototype = (function(o) {
+	AppRegistrationWidget.prototype = (function(o) {
 		function F() {
 		}
 		;
 		F.prototype = o;
 		return new F();
 	})(JkWidgetLayerWidget.prototype);
-	AppTasklist.prototype.constructor = AppTasklist;
-	AppTasklist.prototype._t = {
-		"JkWidgetHeightAwareWidget" : true,
+	AppRegistrationWidget.prototype.constructor = AppRegistrationWidget;
+	AppRegistrationWidget.prototype._t = {
 		"JkWidgetParentAwareWidget" : true,
+		"JkWidgetHeightAwareWidget" : true,
+		"AppRegistrationWidget" : true,
 		"JkWidgetWidget" : true,
-		"AppTasklist" : true,
 		"JkWidgetLayerWidget" : true,
-		"JkWidgetTitledWidget" : true,
 		"JkWidgetContainerWidget" : true,
 		"JkWidgetWidgetWithLayout" : true
 	};
-	AppTasklist.prototype._tobj = AppTasklist;
-	AppTasklist.NEW_JkUiGuiApplicationContext = function(context) {
-		var v = new AppTasklist;
-		return v.CTOR_AppTasklist_JkUiGuiApplicationContext(context);
+	AppRegistrationWidget.prototype._tobj = AppRegistrationWidget;
+	AppRegistrationWidget.NEW_JkUiGuiApplicationContext = function(context) {
+		var v = new AppRegistrationWidget;
+		return v.CTOR_AppRegistrationWidget_JkUiGuiApplicationContext(context);
 	};
-	AppTasklist.prototype.CTOR_AppTasklist_JkUiGuiApplicationContext = function(context) {
-		this.list = null;
-		this.container = null;
+	AppRegistrationWidget.prototype.CTOR_AppRegistrationWidget_JkUiGuiApplicationContext = function(context) {
+		this.password = null;
+		this.username = null;
+		this.address = null;
+		this.Contact = null;
+		this.lastname = null;
+		this.firstname = null;
+		this.vbox = null;
 		if(JkWidgetLayerWidget.prototype.CTOR_JkWidgetLayerWidget_JkUiGuiApplicationContext.call(this, context) == null) {
 			return null;
 		}
 		return this;
 	};
-	AppTasklist.prototype.initializeWidget = function() {
-		JkWidgetLayerWidget.prototype.initializeWidget.call(this);
-		AppAPIClient.getInstance().getTasks((function(response1) {
-			var data = response1.getDynamicMap("data");
-			if(!(data != null)) {
-				return;
-			}
-			var records = data.getDynamicVector("records");
-			if(!(records != null) || records.getSize() < 1) {
-				this.list.addWidget1((JkWidgetAlignWidget.forWidget(this.context, (JkWidgetLabelWidget.forText(this.context, "No record")), 0.5, 0.5, 0)), 1.0);
-			}
-			else {
-				var array = records.toVector();
-				if(array != null) {
-					var n = 0;
-					var m = array.length;
-					for(n = 0 ; n < m ; n++) {
-						var record = (function(o) {
-							if(JkLangDynamicMap.IS_INSTANCE && JkLangDynamicMap.IS_INSTANCE(o)) {
-								return o;
-							}
-							return null;
-						}.bind(this))(array[n]);
-						if(record != null) {
-							var task = JkLangString.safeString((record.getString("name", null))) + " - " + JkLangString.safeString((record.getString("description", null)));
-							var lbltask = JkWidgetLabelWidget.forText(this.context, task);
-							var hbox = JkWidgetHorizontalBoxWidget.forContext(this.context, 0, (this.context.getHeightValue("0.5mm")));
-							hbox.addWidget(lbltask);
-							this.list.addWidget1((JkWidgetAlignWidget.forWidget(this.context, hbox, 0.5, 0.5, 0)), 1.0);
-						}
-					}
-				}
-			}
-		}.bind(this)), null);
+	AppRegistrationWidget.prototype.initializeWidget = function() {
+		var submitbtn = JkWidgetCommonButtonWidget.forText(this.context, "SUBMIT", (function() {
+		}.bind(this)));
+		submitbtn.setWidgetFontSize((this.context.getHeightValue("6mm")));
+		this.vbox.addWidget(submitbtn);
+		var loginbtn = JkWidgetLabelWidget.forText(this.context, "LOGIN");
+		loginbtn.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.vbox.addWidget(loginbtn);
 	};
-	AppTasklist.prototype.getWidgetTitle = function() {
-		return "Task list";
-	};
-	AppTasklist.prototype.createWidget = function() {
+	AppRegistrationWidget.prototype.createWidget = function() {
 		JkWidgetLayerWidget.prototype.createWidget.call(this);
 		var thisWidget = this;
-		var widget = JkWidgetVerticalScrollerWidget.NEW_JkUiGuiApplicationContext(this.context);
-		widget.setWidgetScrollBarDisabled(true);
-		this.container = JkWidgetLayerWithBackgroundColorWidget.NEW_JkUiGuiApplicationContext(this.context);
-		this.container.setWidgetColor((JkGfxColor.white()));
-		this.list = JkWidgetVerticalBoxWidget.NEW_JkUiGuiApplicationContext(this.context);
-		this.list.setWidgetMargin((this.context.getHeightValue("5mm")));
-		this.list.setWidgetSpacing((this.context.getHeightValue("5mm")));
-		this.container.addWidget(this.list);
-		widget.addWidget(this.container);
+		var widget = JkWidgetCanvasWidget.NEW_JkUiGuiApplicationContext(this.context);
+		widget.setWidgetColor((JkGfxColor.instance("#347890")));
 		this.addWidget(widget);
+		var widget2 = JkWidgetVerticalScrollerWidget.NEW_JkUiGuiApplicationContext(this.context);
+		var widget3 = JkWidgetAlignWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.vbox = JkWidgetVerticalBoxWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.vbox.setWidgetMargin((this.context.getHeightValue("10sm")));
+		this.vbox.setWidgetSpacing((this.context.getHeightValue("100um")));
+		var widget4 = JkWidgetLabelWidget.NEW_JkUiGuiApplicationContext(this.context);
+		widget4.setWidgetText("Create Accounts");
+		widget4.setWidgetTextColor((JkGfxColor.black()));
+		widget4.setWidgetFontSize((this.context.getHeightValue("6mm")));
+		widget4.setWidgetTextAlign(JkWidgetLabelWidget.ALIGN_CENTER);
+		widget4.setWidgetFontBold(true);
+		this.vbox.addWidget(widget4);
+		this.firstname = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.firstname.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_NAME);
+		this.firstname.setWidgetPlaceholder("FIRST NAME");
+		this.firstname.setWidgetBackgroundColor((JkGfxColor.white()));
+		this.firstname.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.firstname.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.firstname);
+		this.lastname = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.lastname.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_NAME);
+		this.lastname.setWidgetPlaceholder("LAST NAME");
+		this.lastname.setWidgetBackgroundColor((JkGfxColor.white()));
+		this.lastname.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.lastname.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.lastname);
+		this.Contact = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.Contact.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_NAME);
+		this.Contact.setWidgetPlaceholder("Contact Number");
+		this.Contact.setWidgetBackgroundColor((JkGfxColor.white()));
+		this.Contact.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.Contact.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.Contact);
+		this.address = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.address.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_NAME);
+		this.address.setWidgetPlaceholder("ADDRESS");
+		this.address.setWidgetBackgroundColor((JkGfxColor.white()));
+		this.address.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.address.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.address);
+		this.username = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.username.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_NAME);
+		this.username.setWidgetPlaceholder("USERNAME");
+		this.username.setWidgetBackgroundColor((JkGfxColor.white()));
+		this.username.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.username.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.username);
+		this.password = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.password.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_NAME);
+		this.password.setWidgetPlaceholder("PASSWORD");
+		this.password.setWidgetBackgroundColor((JkGfxColor.white()));
+		this.password.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.password.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.password);
+		widget3.addWidget1(this.vbox, 0.5, 0.5, true);
+		widget2.addWidget(widget3);
+		this.addWidget(widget2);
 	};
-	AppTasklist.IS_INSTANCE = function(o) {
-		return o != null && o._t != null && o._t["AppTasklist"] === true;
+	AppRegistrationWidget.IS_INSTANCE = function(o) {
+		return o != null && o._t != null && o._t["AppRegistrationWidget"] === true;
+	};
+	let AppLoginWidget = function() {
+		JkWidgetLayerWidget.call(this);
+		this.vbox = null;
+		this.email = null;
+		this.password = null;
+	};
+	AppLoginWidget.prototype = (function(o) {
+		function F() {
+		}
+		;
+		F.prototype = o;
+		return new F();
+	})(JkWidgetLayerWidget.prototype);
+	AppLoginWidget.prototype.constructor = AppLoginWidget;
+	AppLoginWidget.prototype._t = {
+		"JkWidgetParentAwareWidget" : true,
+		"JkWidgetHeightAwareWidget" : true,
+		"JkWidgetWidget" : true,
+		"JkWidgetWidgetWithLayout" : true,
+		"JkWidgetLayerWidget" : true,
+		"JkWidgetContainerWidget" : true,
+		"AppLoginWidget" : true
+	};
+	AppLoginWidget.prototype._tobj = AppLoginWidget;
+	AppLoginWidget.NEW_JkUiGuiApplicationContext = function(context) {
+		var v = new AppLoginWidget;
+		return v.CTOR_AppLoginWidget_JkUiGuiApplicationContext(context);
+	};
+	AppLoginWidget.prototype.CTOR_AppLoginWidget_JkUiGuiApplicationContext = function(context) {
+		this.password = null;
+		this.email = null;
+		this.vbox = null;
+		if(JkWidgetLayerWidget.prototype.CTOR_JkWidgetLayerWidget_JkUiGuiApplicationContext.call(this, context) == null) {
+			return null;
+		}
+		return this;
+	};
+	AppLoginWidget.prototype.initializeWidget = function() {
+		JkWidgetLayerWidget.prototype.initializeWidget.call(this);
+		var signupbtn = JkWidgetCommonButtonWidget.forText(this.context, "Login", (function() {
+			JkWidgetCommonNavigationWidget.switchToContainer(this, (AppRegistrationWidget.NEW_JkUiGuiApplicationContext(this.context)));
+		}.bind(this)));
+		signupbtn.setWidgetBackgroundColor((JkGfxColor.instance("#347890")));
+		signupbtn.setWidgetTextColor((JkGfxColor.white()));
+		signupbtn.setWidgetFontSize((this.context.getHeightValue("4mm")));
+		this.vbox.addWidget(signupbtn);
+	};
+	AppLoginWidget.prototype.createWidget = function() {
+		JkWidgetLayerWidget.prototype.createWidget.call(this);
+		var thisWidget = this;
+		var widget = JkWidgetCanvasWidget.NEW_JkUiGuiApplicationContext(this.context);
+		widget.setWidgetColor((JkGfxColor.instance("#347890")));
+		this.addWidget(widget);
+		var widget2 = JkWidgetVerticalScrollerWidget.NEW_JkUiGuiApplicationContext(this.context);
+		var widget3 = JkWidgetAlignWidget.NEW_JkUiGuiApplicationContext(this.context);
+		widget3.setWidgetMarginLeft(400);
+		widget3.setWidgetMarginRight(400);
+		this.vbox = JkWidgetVerticalBoxWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.vbox.setWidgetMargin((this.context.getHeightValue("5000um")));
+		this.vbox.setWidgetSpacing((this.context.getHeightValue("2000um")));
+		var widget4 = JkWidgetLabelWidget.NEW_JkUiGuiApplicationContext(this.context);
+		widget4.setWidgetText("ADMIN Login");
+		widget4.setWidgetTextColor((JkGfxColor.instance("#2A9D8F")));
+		widget4.setWidgetFontSize((this.context.getHeightValue("4mm")));
+		widget4.setWidgetTextAlign(JkWidgetLabelWidget.ALIGN_CENTER);
+		widget4.setWidgetFontBold(true);
+		this.vbox.addWidget(widget4);
+		this.email = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.email.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_EMAIL_ADDRESS);
+		this.email.setWidgetPlaceholder("Email Address");
+		this.email.setWidgetBackgroundColor((JkGfxColor.instance("#b0b0b0")));
+		this.email.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.email.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.email);
+		this.password = JkWidgetCommonTextInputWidget.NEW_JkUiGuiApplicationContext(this.context);
+		this.password.setWidgetType(JkWidgetCommonTextInputWidget.TYPE_PASSWORD);
+		this.password.setWidgetPlaceholder("Password");
+		this.password.setWidgetBackgroundColor((JkGfxColor.instance("#b0b0b0")));
+		this.password.setWidgetFontSize((this.context.getHeightValue("3mm")));
+		this.password.setWidgetPadding1((this.context.getHeightValue("2500um")));
+		this.vbox.addWidget(this.password);
+		widget3.addWidget1(this.vbox, 0.5, 0.5, true);
+		widget2.addWidget(widget3);
+		this.addWidget(widget2);
+	};
+	AppLoginWidget.IS_INSTANCE = function(o) {
+		return o != null && o._t != null && o._t["AppLoginWidget"] === true;
 	};
 	let AppMainScreen = function() {
 		JkWidgetScreenForWidget.call(this);
@@ -27263,7 +27378,7 @@ function app() {
 		this.navi.setWidgetEnableActionBar(false);
 		this.setWidget(this.navi);
 		AppAPIClient.create(this.context, this.navi);
-		this.navi.pushWidget((AppTasklist.NEW_JkUiGuiApplicationContext(this.context)));
+		this.navi.pushWidget((AppLoginWidget.NEW_JkUiGuiApplicationContext(this.context)));
 	};
 	AppMainScreen.main = function(args) {
 		var context = JkUiGuiApplicationContextForHTML.NEW();

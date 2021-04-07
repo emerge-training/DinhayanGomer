@@ -1,0 +1,122 @@
+import jk.log
+import jk.sqlite
+import jk.mysql
+import jk.sql
+import jk.env
+import jk.time
+
+class:
+
+model Info
+{
+    id as string
+    fname as string
+    lname as string
+    mname as string
+    status as string
+    sex as string
+    address as string
+    sub_handle as string
+    timeStampAdded as long
+    timeStampLastUpdated as long
+     
+}   
+    const INFO ="info"
+    pvar db as MySQLDatabase
+
+
+func forContext(ctx as LoggingContext) static as this
+{
+    var cstr = EnvironmentVariable.get("Faculty_Profilling")
+    Log.debug(ctx, "Opening database connection: " .. cstr .. "'")
+    db = MySQLDatabase.forConnectionStringSync(ctx, cstr)
+    if not db:
+        Error.throw("failedToConnectionToDatabase", cstr)
+    var v = new this()
+    v.setDb(db)
+    return v
+}
+
+
+func updateTable(table as SQLTableInfo)
+{
+    if not table:
+        Error.throw("nullTable", "updateTable")
+    if not db:
+        Error.throw("nullDB","updateTable")
+    if not db.ensureTableExistsSync(table):
+        Error.throw("MALI", table.getName())
+
+}
+
+func updateinfoTables
+{
+    var info=SQLTableInfo.forName(INFO)
+    info.addStringKeyColumn("id")
+    info.addStringKeyColumn("fname")
+    info.addStringKeyColumn("lname")
+    info.addStringKeyColumn("mname")
+    info.addStringKeyColumn("status")
+    info.addStringKeyColumn("sex")
+    info.addStringKeyColumn("address")
+    info.addStringKeyColumn("sub_handle")
+    info.addLongColumn("timeStampAdded")
+    info.addLongColumn("timeStampLastUpdated")
+    updateTable(info)
+}
+
+func addInfo(info as Info) as Info
+{
+    assert info
+    info.setId("1")
+    info.setTimeStampAddedValue(SystemClock.asUTCSeconds())
+    assert db.executeSync(db.prepareInsertStatementSync(INFO, info.toDynamicMap()))
+    return info
+
+}
+
+func updateInfo(id as string, info as Info) as bool
+{
+    assert info
+    info.setTimeStampLastUpdatedValue(SystemClock.asUTCSeconds())
+    var criteria = new Info()
+    criteria.setId(id)
+    return db.executeSync(db.prepareUpdateStatementSync(INFO, criteria.toDynamicMap(), info.toDynamicMap()))
+}
+
+func deleteInfo(id as string) as bool
+{
+    var criteria = new Info()
+    criteria.setId(id)
+    return db.executeSync(db.prepareDeleteStatementSync(INFO, criteria.toDynamicMap()))
+}
+
+
+func getInfo as DynamicMap
+{
+    var v = new vector<Info>
+    var it = assert db.querySync(db.prepareQueryAllStatementSync(INFO)):
+        return null
+    while it {
+        var o = it.next()
+        if not o:
+            break
+        var info = Info.forJsonObject(o)
+        if not info:
+            continue
+        v += info
+
+    }
+    var data = new DynamicMap()
+    data.setObject("records", v)
+    return data
+
+}
+
+func close
+{
+    if db:
+        db.closeSync()
+    db = null
+}
+
